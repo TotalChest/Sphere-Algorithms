@@ -7,7 +7,7 @@ int main(void)
 	unsigned long count = 0, temp;
 	std::cin >> n;
 
-	unsigned long mas[n];
+	unsigned long *mas = new unsigned long[n];
 	for (int i = 0; i < n; i++)
 		std::cin >> mas[i];
 

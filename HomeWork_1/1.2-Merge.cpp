@@ -8,7 +8,6 @@ int main(void)
 	std::cin >> n;
 
 	unsigned long mas[n];
-	unsigned long res[2*n];
 	for (int i = 0; i < n; i++)
 		std::cin >> mas[i];
 

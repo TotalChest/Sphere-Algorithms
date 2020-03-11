@@ -5,7 +5,7 @@
 
 struct tree
 {
-	enum {CHILDREN = 4};
+	enum {CHILDREN = 4}; //так можно описать константу в классе
 	tree *c[CHILDREN] {};
 	bool end = false; // Только новый с++
 };

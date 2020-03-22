@@ -12,6 +12,7 @@ long long merge_sort(vector<long> &vec, long l, long r)
 	long mid = (r + l) / 2;
 	count += merge_sort(vec, l, mid);
 	count += merge_sort(vec, mid, r);
+	
 	vector<long> tmp(r - l);
 
 	long a = l, b = mid;

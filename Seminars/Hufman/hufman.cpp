@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
-#include "PriorityQueue.h"
+#include "priority_queue.h"
 
 using namespace std;
 
@@ -20,7 +20,7 @@ tree* build_tree(vector<size_t> const &freq)
 	priority_queue pq(non_zeroes);
 	for(size_t c = 0; c < freq.size(); c++)
 	{
-		if(freq[c] = 0) continue;
+		if(freq[c] == 0) continue;
 		tree *t = new tree();
 		t->freq = freq[c];
 		t->code = c;
@@ -33,8 +33,9 @@ tree* build_tree(vector<size_t> const &freq)
 	//debug
 	while(pq.size() > 0)
 	{
-		auto p = pq,fetchMin();
-		printf("p.pryority=%d\n", p.priority);
+		auto p = pq.fetchMin();
+		printf("p.priority=%d\n", p.priority);
+		pq.removeMin();
 	}
 }
 int main()
@@ -42,16 +43,15 @@ int main()
 
 	vector<size_t> freq(256);
 	FILE *in = fopen("input","rb");
-	if (in == nulptr) {printf("no input file\n"); return 0;}
+	if (in == nullptr) {printf("No input file\n"); return 0;}
 	for(int c = fgetc(in); c!= EOF; c = fgetc(in))
 		freq[c]++;
 	rewind(in);
 	auto root = build_tree(freq);
 
+
+
+
 	fclose(in);
-
-
-
-
 	return 0;
 }

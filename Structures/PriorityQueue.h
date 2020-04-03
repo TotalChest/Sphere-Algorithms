@@ -29,11 +29,11 @@ public:
      return 0; 
    }  
 
-   bhnode *fetchMin() {
+   bhnode *fetchMax() {
       return numnodes == 0? NULL : body + 1;
    }
 
-   int removeMin() {
+   int removeMax() {
       if (numnodes == 0) return -1;
       body[1] = body[numnodes--];
       heapify(1);

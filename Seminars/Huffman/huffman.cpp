@@ -8,7 +8,6 @@ using namespace std;
 
 struct tree
 {
-	size_t freq;
 	tree *children[2]{}; // Такая инициализация только в с++11
 	int code{-1};
 };
@@ -23,7 +22,6 @@ tree* build_tree(vector<size_t> const &freq)
 	{
 		if(freq[c] == 0) continue;
 		tree *t = new tree();
-		t->freq = freq[c];
 		t->code = c;
 		pqnode p;
 		p.priority = (int)freq[c];
@@ -50,13 +48,13 @@ tree* build_tree(vector<size_t> const &freq)
 		pqnode sum;
 		sum.priority = left.priority + right.priority;
 		tree* t = new tree();
-		t->freq = sum.priority;
 		t->children[0] = (tree *)left.value;
 		t->children[1] = (tree *)right.value;
 		sum.value = (void *)t;
+		pq.insert(sum);
 	}
 	auto root = pq.fetchMin();
-	return root;
+	return (tree *)root.value;
 }
 
 void walk(tree const *root, string code, vector<string> &repr)
@@ -72,7 +70,7 @@ void walk_free(tree *root)
 {
 	for(int i = 0; i < 2; ++i)
 		if(root->children[i] != nullptr)
-			walk(root->children[i])
+			walk_free(root->children[i]);
 	delete root;
 }
 
@@ -86,28 +84,32 @@ void encode()
 
 	vector<size_t> freq(257);
 	FILE *in = fopen("input","rb");
-	if (in == nullptr) {printf("No input file\n"); return;}
+	if (in == nullptr)
+	{
+		printf("No input file\n");
+		return;
+	}
 	for(int c = fgetc(in); c!= EOF; c = fgetc(in))
 		freq[c]++;
-	freq[256]++;
+	freq[256]++; // последний символ
 	rewind(in);
 	FILE *out = fopen("output", "w");
 	auto root = build_tree(freq);
 	vector<string> repr(257);
 	fill_repr(root, repr);
 	walk_free(root);
-	for(size_t i = 0; i < repr; ++i)
+	for(size_t i = 0; i < repr.size(); ++i)
 		if(!repr[i].empty())
 			fprintf(out, "%zu %s\n", i, repr[i].c_str());
 	for(int c = fgetc(in); c != EOF; c = fgetc(in))
-		fprintf(out, repr[c].c_str());
-	fprintf(out, repr[256].c_str());
+		fprintf(out, "%s", repr[c].c_str());
+	fprintf(out, "%s",repr[256].c_str());
 
 	fclose(out);
 	fclose(in);
 }
 
-void add_code(tree * &root, int code, const string repr)
+void add_code(tree * &root, int code, string const &repr)
 {
 	if(root == nullptr) root = new tree();
 	auto curr = root;
@@ -116,7 +118,7 @@ void add_code(tree * &root, int code, const string repr)
 		assert(c == '0' || c == '1');
 		if(curr->children[c-'0'] == nullptr)
 			curr->children[c-'0'] = new tree();
-		curr = root->children[c-'0'];
+		curr = curr->children[c-'0'];
 	}
 	curr->code = code;
 }
@@ -124,7 +126,11 @@ void add_code(tree * &root, int code, const string repr)
 void decode()
 {
 	FILE *in = fopen("output", "r");
-	if(in == nullptr) {printf("No input file\n"); return;}
+	if(in == nullptr)
+	{
+		printf("No input file\n");
+		return;
+	}
 	char buf[256];
 	tree *t{};
 	for(;;)

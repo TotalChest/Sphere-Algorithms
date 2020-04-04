@@ -43,7 +43,7 @@ public:
 
 	int insert(pqnode const &node) {
 		if (numnodes > maxsize) {
-			return -1; // или расширяем.
+			return -1;
 		}
 		body[++numnodes] = node;
 		for (size_t i = numnodes; i > 1 &&

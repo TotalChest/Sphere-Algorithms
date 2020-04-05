@@ -9,10 +9,10 @@ using namespace std;
 int main() {
 	int N, M, count = 0;
 	scanf("%d %d", &N, &M);
-	unordered_map<unsigned long long, set<int>> interval;
+	unordered_map<unsigned long long, set<int>> interval; 
 	unordered_set<unsigned long long> cache;
 	vector<unsigned long long> vec(M);
-	set<pair<int, unsigned long long>> BH;
+	vector< pair<int, unsigned long long> > BH;
 
 	for(int i = 0; i < M; ++i) {
 		unsigned long long tmp; 
@@ -25,12 +25,8 @@ int main() {
 	unsigned long long val = 0;
 
 	for(int i = 0; i < M; ++i) {
-		for(auto it = BH.begin(); it != BH.end(); ++it) {
-			priority = (*it).first;
-			val = (*it).second;
-			BH.erase(it);
-			BH.insert({priority-1, val});
-		}
+		for(int d = 0; d < BH.size(); ++d)
+			BH[d].first -= 1;
 		interval[vec[i]].erase(interval[vec[i]].begin());
 		if(cache.find(vec[i]) == cache.end()) {
 			++count;
@@ -40,33 +36,42 @@ int main() {
 					priority = 1000000;
 				else
 					priority = *(interval[vec[i]].begin())-i;
-				BH.insert({priority, vec[i]});
+				BH.push_back({priority, vec[i]});
 			}
 			else {
-				unsigned long long k = (*(--BH.end())).second;
-				BH.erase(--BH.end());
+				int num = 0, pr = BH[0].first;
+				vector< pair<int, unsigned long long> >::iterator it = BH.begin(), max_it = BH.begin();
+				for(int d = 1; d < BH.size(); ++d) {
+					it++;
+					if(BH[d].first > pr) {
+						num = d;
+						pr = BH[d].first;
+						max_it = it;
+					}
+				}
+				unsigned long long k = BH[num].second;
+				BH.erase(max_it);
 				cache.erase(k);
 				cache.insert(vec[i]);	
 				if(interval[vec[i]].empty())
 					priority = 1000000;
 				else
 					priority = *(interval[vec[i]].begin())-i;
-				BH.insert({priority, vec[i]});
+				BH.push_back({priority, vec[i]});
 			}
 		}
 		else{
-			for(auto it = BH.begin(); it != BH.end(); ++it)
-				if((*it).second == vec[i]){
-					BH.erase(it);
+			for(int d = 0; d < BH.size(); ++d)
+				if(BH[d].second == vec[i]){
 					if(interval[vec[i]].empty())
 						priority = 1000000;
 					else
 						priority = *(interval[vec[i]].begin())-i;
-					BH.insert({priority, vec[i]});
+					BH[d].first = priority;
+					break;
 				}
 		}	
 	}
-
 
 	printf("%d", count);
 

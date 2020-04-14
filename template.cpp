@@ -7,5 +7,5 @@ int main() {
 
 	int w;
 	cin >> w;
-	cout << w+1; 
+	cout << w+1;
 }

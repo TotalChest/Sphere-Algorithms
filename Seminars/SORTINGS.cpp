@@ -286,7 +286,7 @@ int main(int argc, char **argv) {
        argc--; argv++;
        start_alg = 5;
     }
-    int n = 100000;
+    int n = 10000000;
     if (argc > 1) {
         n = atoi(argv[1]);
     } 

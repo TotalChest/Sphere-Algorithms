@@ -20,7 +20,7 @@ int main() {
 	for(int k = 0; k < N; ++k)
   		for(int i = 0; i < N; ++i)
     		for(int j = 0; j < N; ++j)
-     			tbl[i][j] = tbl[i][j] || (tbl[i][k] && tbl[k][j]);
+     			tbl[i][j] ||= (tbl[i][k] && tbl[k][j]);
 
     for(int i = 0; i < N; ++i){
 		for(int j = 0; j < N; ++j)

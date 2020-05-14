@@ -5,22 +5,22 @@
 #include <queue>
 using namespace std;
 
-int N, M, K, S, F;
+long long N, M, K, S, F;
 
-vector<int> dist(int src, map<int, vector<pair<int, int>>> &edges) {
-	vector<int> d(N, -1);
-	vector<int> color(N, 0);
-	queue<int> Q;
+vector<long long> dist(long long src, map<long long, vector<pair<long long, long long>>> &edges) {
+	vector<long long> d(N, -1);
+	vector<long long> color(N, 0);
+	queue<long long> Q;
 
 	Q.push(src);
 	d[src] = 0;
 	color[src] = 1;
 
 	while(!(Q.empty())) {
-		int curr = Q.front();
+		long long curr = Q.front();
 		Q.pop();
 		color[curr] = 1;
-		vector<pair<int, int>> tmp = edges[curr];
+		vector<pair<long long, long long>> tmp = edges[curr];
 		sort(tmp.begin(), tmp.end());
 		for(auto elem: tmp) {
 			if(color[elem.second] == 0)
@@ -38,27 +38,29 @@ int main() {
 	cin.tie(nullptr);
 
 	cin >> N >> M >> K;
-	vector<int> f(K);
-	map<int, vector<pair<int, int>>> edges;
+	vector<long long> f(K);
+	map<long long, vector<pair<long long, long long>>> edges;
 	for (int i = 0; i < K; ++i) {
 		cin >> f[i];
 		--f[i];
 	}
 	for (int i = 0; i < M; ++i) {
-		int s, d, w;
+		long long s, d, w;
 		cin >> s >> d >> w;
 		--s;
 		--d;
+		if (s == d)
+			continue;
 		edges[s].push_back(make_pair(w,d));
 		edges[d].push_back(make_pair(w,s));
 	}
 	cin >> S >> F; --S; --F;
-	vector<int> d = dist(F, edges);
+	vector<long long> d = dist(F, edges);
 	if (d[S] == -1) {
 		cout << -1;
 		return 0;
 	}
-	int exit = d[S], min = 1000000000;;
+	long long exit = d[S], min = 10000000000;;
 	for (int i = 0; i < K; ++i)
 		if (d[f[i]] < min)
 			min = d[f[i]];

@@ -1,44 +1,56 @@
 #include <iostream>
 #include <stdio.h>
 #include <unordered_map>
+#include <queue>
 using namespace std;
 
-void set_rang(string curr, int rang, unordered_map<string, int> &MAP) {
-	if (MAP.find(curr) != MAP.end())
-		if (rang < MAP[curr])
-			MAP[curr] = rang;
+void F(string tbl) {
+
+	unordered_map<string, int> MAP;
+	queue<pair<string, int>> Q;
+
+	Q.push(make_pair("123456780",0));
+
+	while(!Q.empty()) {
+		pair<string, int> tmp = Q.front();
+		Q.pop();
+
+		if (MAP.find(tmp.first) != MAP.end())
+			continue;
 		else
+			MAP[tmp.first] = 1;
+
+		if (tbl == tmp.first) {
+			cout << tmp.second;
 			return;
-	else
-		MAP[curr] = rang;
+		}
 
-	if (rang > 32)
-		return;
-
-	int pos = curr.find("0");
-
-	string tmp = curr;
-	if (pos + 3 <= 8) {
-		swap(tmp[pos], tmp[pos+3]);
-		set_rang(tmp, rang + 1, MAP);
-	}
-	tmp = curr;
-	if (pos - 3 >= 0) {
-		swap(tmp[pos], tmp[pos-3]);
-		set_rang(tmp, rang + 1, MAP);
-	}
-	tmp = curr;
-	if ((pos + 1)%3 != 0) {
-		swap(tmp[pos], tmp[pos+1]);
-		set_rang(tmp, rang + 1, MAP);
-	}
-	tmp = curr;
-	if (pos%3 != 0) {
-		swap(tmp[pos], tmp[pos-1]);
-		set_rang(tmp, rang + 1, MAP);
+		string curr = tmp.first;
+		int pos = curr.find("0");
+		if (pos + 3 <= 8) {
+			swap(curr[pos], curr[pos+3]);
+			Q.push(make_pair(curr, tmp.second + 1));
+		}
+		curr = tmp.first;
+		if (pos - 3 >= 0) {
+			swap(curr[pos], curr[pos-3]);
+			Q.push(make_pair(curr, tmp.second + 1));
+		}
+		curr = tmp.first;
+		if ((pos + 1)%3 != 0) {
+			swap(curr[pos], curr[pos+1]);
+			Q.push(make_pair(curr, tmp.second + 1));
+		}
+		curr = tmp.first;
+		if (pos%3 != 0) {
+			swap(curr[pos], curr[pos-1]);
+			Q.push(make_pair(curr, tmp.second + 1));
+		}
 	}
 
+	cout << -1;
 	return;
+
 }
 
 int main() {
@@ -53,14 +65,8 @@ int main() {
 		else
 			tbl += d;
 	}
-	unordered_map<string, int> MAP;
 
-	set_rang("123456780", 0, MAP);
-
-	if (MAP.find(tbl) != MAP.end())
-		cout << MAP[tbl];
-	else
-		cout << -1;
+	F(tbl);
 
 	return 0;
 }

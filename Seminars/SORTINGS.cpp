@@ -51,8 +51,7 @@ void sort_shaker(int *a, int n) {
 }
 
 void sort_bubble_traditional(int *a, int n) {
-   bool sorted = false;
-   for (int i = n-1; --n >- 0;) {
+   for (int i = n; --i > 0;) {
 	   for (int j = 0; j < i; j++) {
 	   	   if (a[j] > a[j+1]) {
 	           int tmp = a[j];
@@ -286,7 +285,7 @@ int main(int argc, char **argv) {
        argc--; argv++;
        start_alg = 5;
     }
-    int n = 10000000;
+    int n = 1000000;
     if (argc > 1) {
         n = atoi(argv[1]);
     } 

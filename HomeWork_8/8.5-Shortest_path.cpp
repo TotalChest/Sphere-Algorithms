@@ -35,8 +35,8 @@ int main() {
 			for (int j = 0; j < M; ++j)
 				if (d[Edges[j].src] < INF) {
 					color[Edges[j].src] = 1;
-					if (d[Edges[j].dst] > d[Edges[j].src]  + Edges[j].weigth) {
-						d[Edges[j].dst] = d[Edges[j].src]  + Edges[j].weigth;
+					if (d[Edges[j].dst] > d[Edges[j].src] + Edges[j].weigth) {
+						d[Edges[j].dst] = d[Edges[j].src] + Edges[j].weigth;
 						if (i == N - 1) {
 							cout << "IMPOSSIBLE\n";
 							return 0;
